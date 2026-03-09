@@ -13,12 +13,12 @@ public class ScoreZone : MonoBehaviour
             GameManager.instance.AddScore(1);
 
             Destroy(other.gameObject);
-
-            Debug.Log($"Caja {item.boxColor} entregada correctamente");
+          
+            Debug.Log("Caja {item.boxColor} entregada");
         }
         else if (item != null)
         {
-            Debug.Log("Color incorrecto para esta zona.");
+            Debug.Log("Color incorrecto.");
         }
     }
 }

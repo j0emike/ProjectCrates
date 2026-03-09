@@ -9,7 +9,9 @@ public class Controller : MonoBehaviour
     public float rotationSpeed = 10f;
 
     [Header("Interaction Settings")]
-    public float rayDistance = 1.5f;
+    public float rayDistance = 2.0f;
+    public float grabRadius = 0.5f;
+    public float grabHeightOffset = 0.2f;
     public Transform holdPoint;
     public LayerMask interactableLayer;
 
@@ -74,7 +76,11 @@ public class Controller : MonoBehaviour
     private void TryPickUp()
     {
         RaycastHit hit;
-        if (Physics.Raycast(transform.position + Vector3.down * 0.75f, transform.forward, out hit, rayDistance, interactableLayer))
+
+        Vector3 origin = transform.position + Vector3.up * grabHeightOffset;
+
+        // SphereCast: Origen, Radio, Direccion, Resultado, Distancia, Capa
+        if (Physics.SphereCast(origin, grabRadius, transform.forward, out hit, rayDistance, interactableLayer))
         {
             if (hit.collider.CompareTag("Box"))
             {
@@ -121,7 +127,14 @@ public class Controller : MonoBehaviour
 
     private void OnDrawGizmos()
     {
+        if (transform == null) return;
+
         Gizmos.color = Color.yellow;
-        Gizmos.DrawRay(transform.position + Vector3.down * 0.75f, transform.forward * rayDistance);
+        Vector3 origin = transform.position + Vector3.up * grabHeightOffset;
+
+        Gizmos.DrawRay(origin, transform.forward * rayDistance);
+
+        Gizmos.DrawWireSphere(origin, grabRadius);
+        Gizmos.DrawWireSphere(origin + transform.forward * rayDistance, grabRadius);
     }
 }
